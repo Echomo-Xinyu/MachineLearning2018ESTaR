@@ -153,6 +153,22 @@ def show_accuracy(obtainedValue, actualValue, Name):
     print("The accuracy for ", Name, "is: ", correctPrediction/totalNumber)
     # return correctPrediction / totalNumber
 
+Time = Time.reshape(-1, 1)
+predicted_CSR = clf.predict(Time)
+MonthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+print("Now plotting the predicted trend..")
+
+for i in range(12):
+    TimeInitialValue = i * 4355
+    TimeFinalValue = i * 4355 + 4355
+    CurrentMonth = MonthName[i]
+    plt.plot(Time[TimeInitialValue:TimeFinalValue], predicted_CSR[TimeInitialValue:TimeFinalValue], 'b--', linewidth=1)
+    plt.xlabel('Time')
+    plt.ylabel('CSR(predicted)')
+    figureName = CurrentMonth + '.svg'
+    plt.savefig(figureName, format="svg")
+    plt.close()
+
 
 
 
