@@ -139,40 +139,46 @@ print("Test labels: ", test_labels, '\n\n\n')
 
 rf = RandomForestClassifier(n_estimators=1000, random_state=23)
 
-from pprint import pprint
-# Look at parameters used by our current forest
-print('Parameters currently in use:\n')
-pprint(rf.get_params())
+clf = svm.SVC(C=1.0, kernel='rbf', gamma=20, decision_function_shape='ovr')
+clf.fit(train_features, train_labels)
+print("clf train score: ", clf.score(train_features, train_labels))
 
-from sklearn.model_selection import RandomizedSearchCV
-# Number of trees in random forest
-n_estimators = [int(x) for x in np.linspace(200, 2000, num = 10)]
-# Maximum number of levels in tree
-max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
-max_depth.append(None)
-# Minimum number of samples required to split a node
-min_samples_split = [2, 5, 10, 25]
-# Minimum number of samples required at each leaf node
-min_samples_leaf = [1, 2, 4, 8]
-# Method of selecting samples for training each tree
-bootstrap = [True, False]
-# Create the random grid
-random_grid = {'n_estimators': n_estimators,
-               'max_depth': max_depth,
-               'min_samples_split': min_samples_split,
-               'min_samples_leaf': min_samples_leaf,
-               'bootstrap': bootstrap}
-pprint(random_grid)
+# # The following part is a cross-validation to find the optimal parameter for the random forest
+# # though it doesnot really work..
+# from pprint import pprint
+# # Look at parameters used by our current forest
+# print('Parameters currently in use:\n')
+# pprint(rf.get_params())
 
-# Use the random grid to search for best hyperparameters
-# First create the base model to tune
-rf = RandomForestClassifier()
-# Random search of parameters, using 3 fold cross validation, 
-# search across 100 different combinations, and use all available cores
-rf_random = RandomizedSearchCV(estimator = rf, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=23, n_jobs = -1)
-# Fit the random search model
-rf_random.fit(train_features, train_labels)
-pprint(rf_random.get_params())
+# from sklearn.model_selection import RandomizedSearchCV
+# # Number of trees in random forest
+# n_estimators = [int(x) for x in np.linspace(200, 2000, num = 10)]
+# # Maximum number of levels in tree
+# max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
+# max_depth.append(None)
+# # Minimum number of samples required to split a node
+# min_samples_split = [2, 5, 10, 25]
+# # Minimum number of samples required at each leaf node
+# min_samples_leaf = [1, 2, 4, 8]
+# # Method of selecting samples for training each tree
+# bootstrap = [True, False]
+# # Create the random grid
+# random_grid = {'n_estimators': n_estimators,
+#                'max_depth': max_depth,
+#                'min_samples_split': min_samples_split,
+#                'min_samples_leaf': min_samples_leaf,
+#                'bootstrap': bootstrap}
+# pprint(random_grid)
+
+# # Use the random grid to search for best hyperparameters
+# # First create the base model to tune
+# rf = RandomForestClassifier()
+# # Random search of parameters, using 3 fold cross validation, 
+# # search across 100 different combinations, and use all available cores
+# rf_random = RandomizedSearchCV(estimator = rf, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=23, n_jobs = -1)
+# # Fit the random search model
+# rf_random.fit(train_features, train_labels)
+# pprint(rf_random.get_params())
 
 def evaluate(model, test_features, test_labels):
     predictions = model.predict(test_features)
@@ -187,12 +193,13 @@ def evaluate(model, test_features, test_labels):
 
 base_model = RandomForestClassifier(n_estimators = 1000, random_state = 23)
 base_model.fit(train_features, train_labels)
-base_accuracy = evaluate(base_model, test_features, test_labels)
+# base_accuracy = evaluate(base_model, test_features, test_labels)
+print('rf score is: ', base_model.score(train_features, train_labels))
 
-best_random = rf_random.best_estimator_
-random_accuracy = evaluate(best_random, test_features, test_labels)
+# best_random = rf_random.best_estimator_
+# random_accuracy = evaluate(best_random, test_features, test_labels)
 
-print('Improvement of {:0.2f}%.'.format( 100 * (random_accuracy - base_accuracy) / base_accuracy))
+# print('Improvement of {:0.2f}%.'.format( 100 * (random_accuracy - base_accuracy) / base_accuracy))
 
 '''
 # rf.fit(train_features, train_labels)
