@@ -138,6 +138,12 @@ def evaluate(model, test_features, test_labels, model_name):
     return accuracy
 
 overall_accuracy_difference = 0
+highest_svm_accuracy = 0
+highest_rf_accuracy = 0
+best_svm_big_run = 0
+best_svm_small_run = 0
+best_rf_big_run = 0
+best_rf_small_run = 0
 
 for x in range(10):
     print("\nThis is the ", x, " run:")
@@ -167,25 +173,74 @@ for x in range(10):
         clf = svm.SVC(C=1.0, kernel='rbf', gamma=20, decision_function_shape='ovr')
         clf.fit(train_features, train_labels)
         svm_accuracy = evaluate(clf, test_features, test_labels, 'svm')
-
+        if svm_accuracy > highest_svm_accuracy:
+            highest_svm_accuracy = svm_accuracy
+            best_svm_model_sofar = clf
+            best_svm_big_run = x
+            best_svm_small_run = i
+        
         rf_model = RandomForestClassifier(n_estimators = 500)
         rf_model.fit(train_features, train_labels)
         rf_accuracy = evaluate(rf_model, test_features, test_labels, 'rf')
+        if rf_accuracy > highest_rf_accuracy:
+            highest_rf_accuracy = rf_accuracy
+            best_rf_model_sofar = rf_model
+            best_rf_big_run = x
+            best_rf_small_run = i
 
         diff = svm_accuracy - rf_accuracy
         overall_accuracy_difference += diff
         print("The difference between the ", x, " time svm model and rf model is: ", diff, '\nPositive means svm has a higher accuracy and bvice versa.')
         print("Complete the ", i, " run in the ", x, " run.\n\n")
         handle.write('The difference between the ' + str(x) + ' time svm model and rf model is: ' + str(diff))
+        if x == 0 and i == 0:
+            print("\n\nCongradulations! It seems your code works well at least for the first part.\n\n")
 
 print("Overall accuracy difference: ", overall_accuracy_difference)
+print("The highest svm model's accuracy is: ", highest_svm_accuracy)
+print("The highest rf model's accuracy is: ", highest_rf_accuracy)
 handle.write("Overall accuracy difference: " + str(overall_accuracy_difference))
+handle.write("The highest svm model's accuracy is: " + str(highest_svm_accuracy))
+handle.write("The index number for the best run is " + str(best_svm_big_run) + ', ' + str(best_svm_small_run))
+handle.write("The highest rf model's score is: " + str(highest_rf_accuracy))
+handle.write("The index number for the best run is: " + str(best_rf_big_run) + ', ' + str(best_rf_small_run))
 
 handle.close()
 
+Time = Time.reshape(-1, 1)
+svm_predicted_CSR = best_svm_model_sofar.predict(Time)
+rf_predicted_CSR = best_rf_model_sofar.predict(Time)
+MonthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+print("Now plotting the predicted trend by svm and rf model as well as teh actual one..")
+modelName = ["svm", "rf", "actual"]
 
-
-
+for i in range(12):
+    TimeInitialValue = i * 4355
+    TimeFinalValue = i * 4355 + 4355
+    CurrentMonth = MonthName[i]
+    for x in range(3):
+        model = modelName[x]
+        if x == 0:
+            plt.plot(Time[TimeInitialValue:TimeFinalValue], svm_predicted_CSR[TimeInitialValue:TimeFinalValue], 'b--', linewidth=1)
+            plt.xlabel('Time')
+            plt.ylabel('CSR(predicted)')
+            figureName = CurrentMonth + model + '.svg'
+            plt.savefig(figureName, format="svg")
+            plt.close()
+        elif x == 1:
+            plt.plot(Time[TimeInitialValue:TimeFinalValue], rf_predicted_CSR[TimeInitialValue:TimeFinalValue], 'g--', linewidth=1)
+            plt.xlabel('Time')
+            plt.ylabel('CSR(predicted)')
+            figureName = CurrentMonth + model + '.svg'
+            plt.savefig(figureName, format="svg")
+            plt.close()
+        elif x == 2:
+            plt.plot(Time[TimeInitialValue:TimeFinalValue], CSR[TimeInitialValue:TimeFinalValue], 'r--', linewidth=1) 
+            plt.xlabel('Time')
+            plt.ylabel('CSR(actual)')
+            figureName = CurrentMonth + model + '.svg'
+            plt.savefig(figureName, format="svg")
+            plt.close()
 
 
 
