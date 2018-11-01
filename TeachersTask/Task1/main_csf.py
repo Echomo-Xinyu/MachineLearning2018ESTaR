@@ -221,6 +221,7 @@ for i in range(12):
     for x in range(3):
         model = modelName[x]
         if x == 0:
+            # 5, 5
             plt.plot(Time[TimeInitialValue:TimeFinalValue], svm_predicted_CSR[TimeInitialValue:TimeFinalValue], 'b--', linewidth=1)
             plt.xlabel('Time')
             plt.ylabel('CSR(predicted)')
@@ -228,6 +229,7 @@ for i in range(12):
             plt.savefig(figureName, format="svg")
             plt.close()
         elif x == 1:
+            # 0, 9
             plt.plot(Time[TimeInitialValue:TimeFinalValue], rf_predicted_CSR[TimeInitialValue:TimeFinalValue], 'g--', linewidth=1)
             plt.xlabel('Time')
             plt.ylabel('CSR(predicted)')

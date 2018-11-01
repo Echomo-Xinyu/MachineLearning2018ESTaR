@@ -8,9 +8,7 @@ Prediction of Solar Power Potential in Singapore using Numerical Weather Predict
 
 ~~Solar energy, being one of the most secure renewable energy, has been widely used in the life, such as agricultural planning, transport, ectricity production and urban plan, etc. Given the high cost of fossil fuel as well as its pollution, the application of solar energy is essential to the development of modern civilisation. Solar techniques include the use of~~
 
-Given the increasing use of solar energy, the prediction of the clean energy is becoming more significant over the time. With colossal amount of data in the past available, Machine Learning Algorithm is playing an important rule in the area. The time series models can be employed to meet the need using historical data. Solar energy forecast can be derived from numerical weather prediction models (NWP) and in this case, we use clear-sky ratio (CSR), which reflects the ratio between SWDIR (Direct Solar Radiation) SWDIF (Diffuse SolarRadiation
-
-
+Given the increasing use of solar energy, the prediction of the clean energy is becoming more significant over the time. As there is a colossal amount of data in the past available, Machine Learning Algorithm is playing an important rule in the area. We can derive solar radiation forecat from numerical weather prediction models (NWP) and in this case, clear-sky ratio (CSR), which reflects the ratio relationship between Diffuse SolarRadiation (SWDIF) and Direct Solar Radiation (SWDIR), is employed to measure the solar power potential. A comparison between various machine learning techniques based on historical data in Singapore is performed in this study and in particular we find that the Supervised Vector Machine (SVM) technique is especially useful and perform best on average across two years and among all the four models (to be decided).
 
 
 
