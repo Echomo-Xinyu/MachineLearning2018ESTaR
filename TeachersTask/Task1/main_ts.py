@@ -111,9 +111,9 @@ df["CSR"] = CorrepCSR
 print(df.head(15))
 print("Shape of the data frame obtained: ", df.shape)
 
-df_train, df_test = np.split(df, [36587], axis=0)
+# df_train, df_test = np.split(df, [36587], axis=0)
 
-ts = df_train.set_index('date')
+ts = df.set_index('date')
 print("\nts's head: ", ts.head())
 
 ts1 = ts.iloc[:, 0].values
