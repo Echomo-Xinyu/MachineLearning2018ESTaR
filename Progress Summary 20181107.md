@@ -23,4 +23,8 @@ As I have read the paper, I'm thinking about <u>building one or two more models<
 
 As this is already Wednesday..
 
-Tomorrow (Thursday) I'm going to have my higher mother tongue exam till 1pm and after that I think there's a make up session for the NOI which was planned on Tuesday but cancelled for Deepvali.
+Tomorrow (Thursday) I'm going to have my higher mother tongue exam till 1pm and after that I think there's a make up session for the NOI which was planned on Tuesday but cancelled for Deepavali. So I'm not coming on Thursday. 
+
+Friday I think I can make it between 2 pm and 5:30 pm, so any time between this is fine to me. But it really depends on whether I've met any problem or we need to further modify the abstract.
+
+Also because of many commitments recently, like taking my juniors for outing, bonding games with them.. and build websites for my school's ISSF and many other small but time-consuming commitments.. I'll try to get most of these things done by this week, latest next week. Emm so hope you can undertsand ..
