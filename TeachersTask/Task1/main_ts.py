@@ -111,7 +111,7 @@ df["CSR"] = CorrepCSR
 print(df.head(15))
 print("Shape of the data frame obtained: ", df.shape)
 
-# df_train, df_test = np.split(df, [36587], axis=0)
+# df_train, df = np.split(df, [36587], axis=0)
 
 ts = df.set_index('date')
 print("\nts's head: ", ts.head())
@@ -139,18 +139,18 @@ results_MA = model_MA.fit(disp=-1)
 model_ARIMA = ARIMA(ts_log, order=(2, 1, 2))  
 results_ARIMA = model_ARIMA.fit(disp=-1)
 
-prediction_AR = model_AR.predict(start=df_test.iloc[0,0], end=df_test.iloc[15679, 0])
-mse_AR = mean_squared_error(df_test.iloc[:,1], prediction_AR)
+prediction_AR = model_AR.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
+mse_AR = mean_squared_error(df.iloc[:,1], prediction_AR)
 rmse_AR = math.sqrt(mse_AR)
 print("RMSE of prediction_AR: ", rmse_AR)
 
-prediction_MA = model_MA.predict(start=df_test.iloc[0,0], end=df_test.iloc[15679, 0])
-mse_MA = mean_squared_error(df_test.iloc[:,1], prediction_MA)
+prediction_MA = model_MA.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
+mse_MA = mean_squared_error(df.iloc[:,1], prediction_MA)
 rmse_MA = math.sqrt(mse_MA)
 print("RMSE of prediction_MA: ", rmse_MA)
 
-prediction_ARIMA = model_ARIMA.predict(start=df_test.iloc[0,0], end=df_test.iloc[15679, 0])
-mse_ARIMA = mean_squared_error(df_test.iloc[:,1], prediction_ARIMA)
+prediction_ARIMA = model_ARIMA.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
+mse_ARIMA = mean_squared_error(df.iloc[:,1], prediction_ARIMA)
 rmse_ARIMA = math.sqrt(mse_ARIMA)
 print("RMSE of prediction_ARIMA: ", rmse_ARIMA)
 
