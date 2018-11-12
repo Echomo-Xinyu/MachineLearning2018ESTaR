@@ -5,6 +5,7 @@ import math
 import datetime
 from sklearn.utils import shuffle
 from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
 
 start_time = datetime.datetime.now()
 
@@ -124,11 +125,49 @@ for element in ProcessedDataset:
     else:
         element[2] = 100000
 ProcessedDataset = np.delete(ProcessedDataset, 1, 1)
-
 np.random.shuffle(ProcessedDataset)
 print("Shape of the processed dataset: ", ProcessedDataset.shape)
 
+Features = ProcessedDataset[:, 0]
+Labels = ProcessedDataset[:, 1]
+
+def evaluate(model, test_features, test_labels, model_name):
+    predictions = model.predict(test_features)
+    errors = abs(predictions - test_labels)
+    mape = 100 * np.mean(errors / test_labels)
+    accuracy = 100 - mape
+    print(model_name, ' Performance')
+    print('Average Error: {:0.4f} degrees.'.format(np.mean(errors)))
+    print('Accuracy = {:0.2f}%.\n'.format(accuracy))
+    return accuracy
+
+# After running the best random state is 99, the score is only 49.99445289669128
+train_features, test_features, train_labels, test_labels = train_test_split(Features, Labels, test_size=0.30, random_state=99)
+train_features, test_features = train_features.reshape(-1, 1), test_features.reshape(-1, 1)
+
+clf1 = MLPClassifier(activation='relu', solver='adam', alpha=1e-5, hidden_layer_sizes=(10, 4), 
+random_state=23, learning_rate='adaptive')
+clf1.fit(train_features, train_labels)
+
+clf2 = MLPClassifier(activation='logistic', solver='sgd', alpha=1e-4, hidden_layer_sizes=(5, 2), 
+random_state=23, learning_rate='adaptive')
+clf2.fit(train_features, train_labels)
+
+clf3 = MLPClassifier(activation='tanh', solver='sgd', alpha=1e-5, hidden_layer_sizes=(20, 4), 
+random_state=23, learning_rate='adaptive')
+clf3.fit(train_features, train_labels)
+
+clf4 = MLPClassifier(activation='logistic', solver='adam', alpha=1e-4, hidden_layer_sizes=(10, 4), 
+random_state=23, learning_rate='adaptive', batch_size=200)
+clf4.fit(train_features, train_labels)
+
+ann1_accuracy = evaluate(clf1, test_features, test_labels, 'ann')
+ann2_accuracy = evaluate(clf2, test_features, test_labels, 'ann')
+ann3_accuracy = evaluate(clf3, test_features, test_labels, 'ann')
+ann4_accuracy = evaluate(clf4, test_features, test_labels, 'ann')
 
 end_time = datetime.datetime.now()
-print("Time taken to run the program till complete the graph: ", (end_time-start_time).seconds, " seconds")
+print("Time taken to run the program till complete the graph: ",
+(end_time-start_time).seconds, " seconds")
+
 

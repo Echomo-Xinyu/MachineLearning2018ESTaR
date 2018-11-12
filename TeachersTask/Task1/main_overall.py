@@ -1,4 +1,4 @@
-# This file is to run a quick version of main_csf.py
+# This file is to run a version of main_csf with addition ann
 # After knowing its result 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,6 +8,7 @@ from scipy.optimize import curve_fit
 import datetime
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 
@@ -39,7 +40,18 @@ def ReadFile(file_name):
 print("Program starting. Please wait;)")
 RoughDataset = ReadFile('wrfdata.5')
 
-Time = RoughDataset[:,0]
+dt = datetime.datetime(2015, 1, 1, 8, 0, 0)
+end = datetime.datetime(2016, 1, 1, 7, 59, 59)
+step = datetime.timedelta(minutes=5)
+
+result = []
+
+while dt < end:
+    result.append(float(dt.strftime('%Y%m%d%H%M%S')))
+    dt += step
+
+Time = np.asarray(result)
+
 SWDIR = RoughDataset[:, 1]
 SWDIF = RoughDataset[:, 2]
 GLW = RoughDataset[:, 3]
@@ -116,6 +128,7 @@ for element in ProcessedDataset:
     else:
         element[2] = 10
 ProcessedDataset = np.delete(ProcessedDataset, 1, 1)
+print("Shape of the processed dataset: ", ProcessedDataset.shape)
 
 np.random.shuffle(ProcessedDataset)
 # print("Shape of the processed dataset: ", ProcessedDataset.shape)
@@ -130,52 +143,50 @@ def evaluate(model, test_features, test_labels, model_name):
     print('Accuracy = {:0.2f}%.\n'.format(accuracy))
     return accuracy
 
-# best rf model
-ProcessedDataset = shuffle(ProcessedDataset, random_state = 3)
-test_dataset = ProcessedDataset[47034:52260]
-test_features, test_labels = test_dataset[:, 0], test_dataset[:, 1]
-train_dataset = np.delete(ProcessedDataset, slice(0, 5226), axis=0)
-train_features, train_labels = train_dataset[:, 0], train_dataset[:, 1]
+Features = ProcessedDataset[:, 0]
+Labels = ProcessedDataset[:, 1]
+train_features, test_features, train_labels, test_labels = train_test_split(Features, Labels, test_size=0.30, random_state=103)
 train_features, test_features = train_features.reshape(-1, 1), test_features.reshape(-1, 1)
+
+# best rf model
 rf_model = RandomForestClassifier(n_estimators=500)
 rf_model.fit(train_features, train_labels)
 rf_accuracy = evaluate(rf_model, test_features, test_labels, "rf")
 
 # best svm model
-ProcessedDataset = shuffle(ProcessedDataset, random_state=53)
-test_dataset = ProcessedDataset[26130:31356]
-test_features, test_labels = test_dataset[:, 0], test_dataset[:, 1]
-train_dataset = np.delete(ProcessedDataset, slice(26130, 31356), axis=0)
-train_features, train_labels = train_dataset[:, 0], train_dataset[:, 1]
-train_features, test_features = train_features.reshape(-1, 1), test_features.reshape(-1, 1)
 clf = svm.SVC(C=1.0, kernel='rbf', gamma=20, decision_function_shape='ovr')
 clf.fit(train_features, train_labels)
 svm_accuracy = evaluate(clf, test_features, test_labels, 'svm')
 
-updatedCSR = ProcessedDataset[:,1]
+clf = MLPClassifier(activation='logistic', solver='adam', alpha=1e-5, hidden_layer_sizes=(10, 4), 
+random_state=23, learning_rate='adaptive')
+clf.fit(train_features, train_labels)
+ann_accuracy = evaluate(clf, test_features, test_labels, 'ann')
+
+# updatedCSR = ProcessedDataset[:,1]
 
 print("The svm model's accuracy is: ", svm_accuracy)
 print("The rf model's accuracy is: ", rf_accuracy)
+print("The ann model's accuracy is: ", ann_accuracy)
 
+# Time = Time.reshape(-1, 1)
+# svm_predicted_CSR = clf.predict(Time)
+# rf_predicted_CSR = rf_model.predict(Time)
 
-Time = Time.reshape(-1, 1)
-svm_predicted_CSR = clf.predict(Time)
-rf_predicted_CSR = rf_model.predict(Time)
+# finalDataset = np.vstack((Time/288, svm_predicted_CSR, rf_predicted_CSR, updatedCSR))
 
-finalDataset = np.vstack((Time/288, svm_predicted_CSR, rf_predicted_CSR, updatedCSR))
+# print("Now plotting the predicted trend by svm and rf model as well as teh actual one..")
 
-print("Now plotting the predicted trend by svm and rf model as well as teh actual one..")
+# plt.plot(Time/288, svm_predicted_CSR, "b--", linewidth=1)
+# plt.plot(Time/288, rf_predicted_CSR, "g--", linewidth=1)
+# plt.plot(Time/288, updatedCSR, "r,")
+# plt.xlabel("Time / Day")
+# plt.ylabel("CSR")
+# figureName = "OverallFigure.svg"
+# plt.savefig(figureName, format="svg")
+# plt.close()
 
-plt.plot(Time/288, svm_predicted_CSR, "b--", linewidth=1)
-plt.plot(Time/288, rf_predicted_CSR, "g--", linewidth=1)
-plt.plot(Time/288, updatedCSR, "r,")
-plt.xlabel("Time / Day")
-plt.ylabel("CSR")
-figureName = "OverallFigure.svg"
-plt.savefig(figureName, format="svg")
-plt.close()
-
-end_time = datetime.datetime.now()
-print("Time taken to run the program till complete the graph: ", (end_time-start_time).seconds, " seconds")
+# end_time = datetime.datetime.now()
+# print("Time taken to run the program till complete the graph: ", (end_time-start_time).seconds, " seconds")
 
 

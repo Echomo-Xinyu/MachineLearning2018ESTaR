@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 
 start_time = datetime.datetime.now()
-handle = open("csf_console_log.txt", "w")
+handle = open("csf_console_log_sra.txt", "w")
 
 
 # Read the data
