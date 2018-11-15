@@ -13,8 +13,8 @@ from sklearn.utils import shuffle
 start_time = datetime.datetime.now()
 
 # Read the data
-def ReadFile(file_name):
-    f = open(file_name)
+def ReadFile(file_pathway):
+    f = open(file_pathway)
     first_else = True
     line_number = 1
     for data in f.readlines():
@@ -37,7 +37,7 @@ def ReadFile(file_name):
 
 print("Program starting. Please wait;)")
 # handle.write("This is the start of the program.")
-RoughDataset = ReadFile('wrfdata.5')
+RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 # print("Data for the first day:\n", RoughDataset)
 
 Time = RoughDataset[:,0]
@@ -179,13 +179,6 @@ print("The test accuracy is: ", test_accuracy)
 train_accuracy = evaluate(MLP, train_features, train_labels, 'ann_train')
 print("The train accuracy is: ", train_accuracy)
 
-def sdError(model, train_features, train_labels, test_features, test_labels):
-    predictions_train = model.predict(train_features)
-    train_error = np.mean(predictions_train - train_labels)
-    predictions_test = model.predict(test_features)
-    test_error = np.mean(predictions_test - test_labels)
-    return train_error, test_error
-
 train_error, test_error = sdError(MLP, train_features, train_labels, test_features, test_labels)
 print("The self-defined train error is: ", train_error)
 print("The self-defined test error is: ", test_error)
@@ -215,13 +208,6 @@ test_accuracy = evaluate(MLP, test_features, test_labels, 'ann_test')
 print("The test accuracy is: ", test_accuracy)
 train_accuracy = evaluate(MLP, train_features, train_labels, 'ann_train')
 print("The train accuracy is: ", train_accuracy)
-
-def sdError(model, train_features, train_labels, test_features, test_labels):
-    predictions_train = model.predict(train_features)
-    train_error = np.mean(predictions_train - train_labels)
-    predictions_test = model.predict(test_features)
-    test_error = np.mean(predictions_test - test_labels)
-    return train_error, test_error
 
 train_error, test_error = sdError(MLP, train_features, train_labels, test_features, test_labels)
 print("The self-defined train error is: ", train_error)

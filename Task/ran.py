@@ -10,8 +10,8 @@ from sklearn import svm
 start_time = datetime.datetime.now()
 
 # Read the data
-def ReadFile(file_name):
-    f = open(file_name)
+def ReadFile(file_pathway):
+    f = open(file_pathway)
     first_else = True
     line_number = 1
     for data in f.readlines():
@@ -33,7 +33,7 @@ def ReadFile(file_name):
     return matrix
 
 print("Program starting. Please wait;)")
-RoughDataset = ReadFile('wrfdata.5')
+RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 
 max = 0.00000
 

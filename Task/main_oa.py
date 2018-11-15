@@ -15,8 +15,8 @@ handle = open("csf_console_log_sra.txt", "w")
 
 
 # Read the data
-def ReadFile(file_name):
-    f = open(file_name)
+def ReadFile(file_pathway):
+    f = open(file_pathway)
     first_else = True
     line_number = 1
     for data in f.readlines():
@@ -39,7 +39,7 @@ def ReadFile(file_name):
 
 print("Program starting. Please wait;)")
 handle.write("This is the start of the program.")
-RoughDataset = ReadFile('wrfdata.5')
+RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 # print("Data for the first day:\n", RoughDataset)
 
 Time = RoughDataset[:,0]

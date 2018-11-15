@@ -7,8 +7,8 @@ We will use a bin size of 0.1 for classification. Once you have this model, we w
 import numpy as np
 import pandas as pd
 
-def ReadFile(file_name):
-    f = open(file_name)
+def ReadFile(file_pathway):
+    f = open(file_pathway)
     first_else = True
     line_number = 1
     for data in f.readlines():
@@ -29,7 +29,7 @@ def ReadFile(file_name):
     f.close()
     return matrix
 
-Dataset = ReadFile('wrfdata.5')
+Dataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 # print(Dataset)
 
 Time = Dataset[:, 0]

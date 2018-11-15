@@ -17,8 +17,8 @@ start_time = datetime.datetime.now()
 bin_size = 0.1
 
 # Read the data
-def ReadFile(file_name):
-    f = open(file_name)
+def ReadFile(file_pathway):
+    f = open(file_pathway)
     first_else = True
     line_number = 1
     for data in f.readlines():
@@ -40,7 +40,7 @@ def ReadFile(file_name):
     return matrix
 
 print("Program running... Please wait")
-Dataset = ReadFile('wrfdata.5')
+Dataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 # print(Dataset)
 '''
 now we have read all the data into the @Dataset variable for further preprocessing

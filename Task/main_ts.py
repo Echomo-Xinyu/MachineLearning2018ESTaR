@@ -15,15 +15,15 @@ from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.stats.diagnostic import acorr_ljungbox
 from sklearn.metrics import mean_squared_error
 
-from matplotlib.pylab import rcParams
-rcParams['figure.figsize'] = 15, 6
+# from matplotlib.pylab import rcParams
+# rcParams['figure.figsize'] = 15, 6
 
 
 start_time = datetime.datetime.now()
 
 # Read the data
-def ReadFile(file_name):
-    f = open(file_name)
+def ReadFile(file_pathway):
+    f = open(file_pathway)
     first_else = True
     line_number = 1
     for data in f.readlines():
@@ -45,7 +45,7 @@ def ReadFile(file_name):
     return matrix
 
 print("Program starting. Please wait;)")
-RoughDataset = ReadFile('wrfdata.5')
+RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 
 RoughDataSize = np.size(RoughDataset, 0)
 
@@ -139,20 +139,20 @@ results_MA = model_MA.fit(disp=-1)
 model_ARIMA = ARIMA(ts_log, order=(2, 1, 2))  
 results_ARIMA = model_ARIMA.fit(disp=-1)
 
-prediction_AR = model_AR.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
-mse_AR = mean_squared_error(df.iloc[:,1], prediction_AR)
-rmse_AR = math.sqrt(mse_AR)
-print("RMSE of prediction_AR: ", rmse_AR)
+# prediction_AR = model_AR.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
+# mse_AR = mean_squared_error(df.iloc[:,1], prediction_AR)
+# rmse_AR = math.sqrt(mse_AR)
+# print("RMSE of prediction_AR: ", rmse_AR)
 
-prediction_MA = model_MA.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
-mse_MA = mean_squared_error(df.iloc[:,1], prediction_MA)
-rmse_MA = math.sqrt(mse_MA)
-print("RMSE of prediction_MA: ", rmse_MA)
+# prediction_MA = model_MA.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
+# mse_MA = mean_squared_error(df.iloc[:,1], prediction_MA)
+# rmse_MA = math.sqrt(mse_MA)
+# print("RMSE of prediction_MA: ", rmse_MA)
 
-prediction_ARIMA = model_ARIMA.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
-mse_ARIMA = mean_squared_error(df.iloc[:,1], prediction_ARIMA)
-rmse_ARIMA = math.sqrt(mse_ARIMA)
-print("RMSE of prediction_ARIMA: ", rmse_ARIMA)
+# prediction_ARIMA = model_ARIMA.predict(start=df.iloc[0,0], end=df.iloc[15679, 0])
+# mse_ARIMA = mean_squared_error(df.iloc[:,1], prediction_ARIMA)
+# rmse_ARIMA = math.sqrt(mse_ARIMA)
+# print("RMSE of prediction_ARIMA: ", rmse_ARIMA)
 
 end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the graph: ", (end_time-start_time).seconds, " seconds")

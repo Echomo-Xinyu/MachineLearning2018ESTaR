@@ -10,8 +10,8 @@ from sklearn.model_selection import train_test_split
 start_time = datetime.datetime.now()
 
 # Read the data
-def ReadFile(file_name):
-    f = open(file_name)
+def ReadFile(file_pathway):
+    f = open(file_pathway)
     first_else = True
     line_number = 1
     for data in f.readlines():
@@ -33,7 +33,7 @@ def ReadFile(file_name):
     return matrix
 
 print("Program starting. Please wait;)")
-RoughDataset = ReadFile('wrfdata.5')
+RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 
 dt = datetime.datetime(2015, 1, 1, 8, 0, 0)
 end = datetime.datetime(2016, 1, 1, 7, 59, 59)
