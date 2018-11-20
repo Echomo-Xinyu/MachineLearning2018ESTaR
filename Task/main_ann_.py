@@ -40,7 +40,6 @@ print("Program starting. Please wait;)")
 RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 # print("Data for the first day:\n", RoughDataset)
 
-Time = RoughDataset[:,0]
 SWDIR = RoughDataset[:, 1]
 SWDIF = RoughDataset[:, 2]
 GLW = RoughDataset[:, 3]
@@ -50,13 +49,25 @@ GLW = RoughDataset[:, 3]
 count = 0
 count_line = list()
 
-n = np.size(Time, 0)
+n = np.size(SWDIR, 0)
 for i in range(n):
     if SWDIR[i] == 0.0 and SWDIF[i] == 0.0:
         count+=1
         count_line.append(i)
 
 # print("total number of removed data (night time): ",count)
+
+dt = datetime.datetime(2015, 1, 1, 8, 0, 0)
+end = datetime.datetime(2016, 1, 1, 7, 59, 59)
+step = datetime.timedelta(minutes=5)
+
+result = []
+
+while dt < end:
+    result.append(float(dt.strftime('%Y%m%d%H%M%S')))
+    dt += step
+
+Time = np.asarray(result)
 
 # @X_zero array is to store all the set of values during night time
 X_zero = np.zeros(shape=(count, 4))

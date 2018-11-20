@@ -38,7 +38,6 @@ RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wr
 FirstDayData = RoughDataset[:,:]
 print("Data for the first day:\n",FirstDayData)
 
-Time = FirstDayData[:,0]
 SWDIR = FirstDayData[:, 1]
 SWDIF = FirstDayData[:, 2]
 GLW = FirstDayData[:, 3]
@@ -48,13 +47,25 @@ GLW = FirstDayData[:, 3]
 count = 0
 count_line = list()
 
-n = np.size(Time, 0)
+n = np.size(SWDIF, 0)
 for i in range(n):
     if SWDIR[i] == 0.0 and SWDIF[i] == 0.0:
         count+=1
         count_line.append(i)
 
 print("total number of removed data (night time): ",count)
+
+dt = datetime.datetime(2015, 1, 1, 8, 0, 0)
+end = datetime.datetime(2016, 1, 1, 7, 59, 59)
+step = datetime.timedelta(minutes=5)
+
+result = []
+
+while dt < end:
+    result.append(float(dt.strftime('%Y%m%d%H%M%S')))
+    dt += step
+
+Time = np.asarray(result)
 
 # @X_zero array is to store all the set of values during night time
 X_zero = np.zeros(shape=(count, 4))
@@ -129,6 +140,7 @@ x_train, y_train = trainingSet[:, 0], trainingSet[:, 1]
 x_test, y_test = testSet[:, 0], testSet[:,1]
 x_train, x_test = x_train.reshape(-1, 1), x_test.reshape(-1, 1)
 
+#@C is 1/alpha and can be used to regulate the function
 clf = svm.SVC(C=1.0, kernel='rbf', gamma=20, decision_function_shape='ovr')
 clf.fit(x_train, y_train)
 
