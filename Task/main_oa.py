@@ -47,40 +47,40 @@ SWDIR = RoughDataset[:, 1]
 SWDIF = RoughDataset[:, 2]
 GLW = RoughDataset[:, 3]
 
-# count variable is to indicate how many number of 0 we've got so far
-# count_line is to store the line number of zero result line
-count = 0
-count_line = list()
+# # count variable is to indicate how many number of 0 we've got so far
+# # count_line is to store the line number of zero result line
+# count = 0
+# count_line = list()
 
-n = np.size(Time, 0)
-for i in range(n):
-    if SWDIR[i] == 0.0 and SWDIF[i] == 0.0:
-        count+=1
-        count_line.append(i)
+# n = np.size(Time, 0)
+# for i in range(n):
+#     if SWDIR[i] == 0.0 and SWDIF[i] == 0.0:
+#         count+=1
+#         count_line.append(i)
 
 # print("total number of removed data (night time): ",count)
 
-# @X_zero array is to store all the set of values during night time
-X_zero = np.zeros(shape=(count, 4))
+# # @X_zero array is to store all the set of values during night time
+# X_zero = np.zeros(shape=(count, 4))
 
-count_line.sort()
-for number in reversed(range(count)):
-    # if number > 0:
-    #     number -= 1
-    # try:
-    line_number = count_line[number]
-    X_zero[number][0] = Time[line_number]
-    X_zero[number][1] = SWDIR[line_number]
-    X_zero[number][2] = SWDIF[line_number]
-    X_zero[number][3] = GLW[line_number]
-    Time = np.delete(Time, line_number, 0)
-    SWDIR = np.delete(SWDIR, line_number, 0)
-    SWDIF = np.delete(SWDIF, line_number, 0)
-    GLW = np.delete(GLW, line_number, 0)
-    # except:
-    #     print("number: ", number)
-    #     print("line_number: ", line_number)
-    #     print("X_zero.shape: ", X_zero.shape)
+# count_line.sort()
+# for number in reversed(range(count)):
+#     # if number > 0:
+#     #     number -= 1
+#     # try:
+#     line_number = count_line[number]
+#     X_zero[number][0] = Time[line_number]
+#     X_zero[number][1] = SWDIR[line_number]
+#     X_zero[number][2] = SWDIF[line_number]
+#     X_zero[number][3] = GLW[line_number]
+#     Time = np.delete(Time, line_number, 0)
+#     SWDIR = np.delete(SWDIR, line_number, 0)
+#     SWDIF = np.delete(SWDIF, line_number, 0)
+#     GLW = np.delete(GLW, line_number, 0)
+#     # except:
+#     #     print("number: ", number)
+#     #     print("line_number: ", line_number)
+#     #     print("X_zero.shape: ", X_zero.shape)
 
 
 CSR = SWDIF / (SWDIF + SWDIR)
@@ -99,6 +99,8 @@ zeroVector = np.zeros(shape=(1, dataSize))
 ProcessedDataset = np.insert(ProcessedDataset, 2, values=zeroVector, axis=1)
 
 for element in ProcessedDataset:
+    if np.isnan(element[1]):
+        element[2] = 0
     if element[1] < 0.1:
         element[2] = 1
     elif element[1] < 0.2:

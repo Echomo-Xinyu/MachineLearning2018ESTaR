@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 # import seaborn as sns
 import datetime
 from sklearn import svm
-
+from sklearn import metrics
 
 start_time = datetime.datetime.now()
 
@@ -34,66 +34,21 @@ def ReadFile(file_pathway):
 
 print("Program starting. Please wait;)")
 RoughDataset = ReadFile('wrfdata.5')
-
-FirstDayData = RoughDataset[:,:]
-print("Data for the first day:\n",FirstDayData)
-
-SWDIR = FirstDayData[:, 1]
-SWDIF = FirstDayData[:, 2]
-GLW = FirstDayData[:, 3]
-
-# count variable is to indicate how many number of 0 we've got so far
-# count_line is to store the line number of zero result line
-count = 0
-count_line = list()
-
-n = np.size(SWDIF, 0)
-for i in range(n):
-    if SWDIR[i] == 0.0 and SWDIF[i] == 0.0:
-        count+=1
-        count_line.append(i)
-
-print("total number of removed data (night time): ",count)
+SWDIR = RoughDataset[:, 1]
+SWDIF = RoughDataset[:, 2]
+GLW = RoughDataset[:, 3]
 
 dt = datetime.datetime(2015, 1, 1, 8, 0, 0)
 end = datetime.datetime(2016, 1, 1, 7, 59, 59)
 step = datetime.timedelta(minutes=5)
-
 result1 = []
 result2 = []
-
 while dt < end:
     result1.append(float(dt.strftime('%Y%m%d%H%M%S')))
     result2.append(float(dt.strftime('%m')))
     dt += step
-
 Time_long = np.asarray(result1)
 month_index = np.asarray(result2)
-
-
-# @X_zero array is to store all the set of values during night Time
-X_zero = np.zeros(shape=(count, 4))
-
-count_line.sort()
-for number in reversed(range(count)):
-    # if number > 0:
-    #     number -= 1
-    # try:
-    line_number = count_line[number]
-    X_zero[number][0] = Time_long[line_number]
-    X_zero[number][1] = SWDIR[line_number]
-    X_zero[number][2] = SWDIF[line_number]
-    X_zero[number][3] = GLW[line_number]
-    Time_long = np.delete(Time_long, line_number, 0)
-    month_index = np.delete(month_index, line_number, 0)
-    SWDIR = np.delete(SWDIR, line_number, 0)
-    SWDIF = np.delete(SWDIF, line_number, 0)
-    GLW = np.delete(GLW, line_number, 0)
-    # except:
-    #     print("number: ", number)
-    #     print("line_number: ", line_number)
-    #     print("X_zero.shape: ", X_zero.shape)
-
 
 CSR = SWDIF / (SWDIF + SWDIR)
 print("CSR:\n", CSR)
@@ -107,47 +62,105 @@ print("Processed dataset: \n", ProcessedDataset)
 print("Processed dataset's shape: ", ProcessedDataset.shape, "\n\n")
 
 zeroVector = np.zeros(shape=(1, dataSize))
+# 3 for day average value, 4 for month average value, 5 for CSR grouping
 ProcessedDataset = np.insert(ProcessedDataset, 3, values=zeroVector, axis=1)
+ProcessedDataset = np.insert(ProcessedDataset, 4, values=zeroVector, axis=1)
+ProcessedDataset = np.insert(ProcessedDataset, 5, values=zeroVector, axis=1)
 
+# below is to convert ratio CSR to correspond group 0-10
 for element in ProcessedDataset:
+    if np.isnan(element[2]):
+        element[5] = 0
     if element[2] < 0.1:
-        element[3] = 0
+        element[5] = 1
     elif element[2] < 0.2:
-        element[3] = 1
+        element[5] = 2
     elif element[2] < 0.3:
-        element[3] = 2
+        element[5] = 3
     elif element[2] < 0.4:
-        element[3] = 3
+        element[5] = 4
     elif element[2] < 0.5:
-        element[3] = 4
+        element[5] = 5
     elif element[2] < 0.6:
-        element[3] = 5
+        element[5] = 6
     elif element[2] < 0.7:
-        element[3] = 6
+        element[5] = 7
     elif element[2] < 0.8:
-        element[3] = 7
+        element[5] = 8
     elif element[2] < 0.9:
-        element[3] = 8
+        element[5] = 9
     else:
-        element[3] = 9
+        element[5] = 10
+
+# mean CSR value each day
+for i in range(365):
+    indexa, indexb = i * 365, (i+1) * 365
+    ProcessedDataset[indexa:indexb, 3] = np.mean(ProcessedDataset[indexa:indexb, 5])
+
+# mean CSR value each month
+dayEachMonth = {1:"31", 2:"28", 3:"31", 4:"30", 5:"31", 6:"30", 7:"31", 8:"31", 9:"30", 10:"31", 11:"30", 12:"31"}
+def TotalDayInMonth(monthIndex):
+    day_number = 0
+    if monthIndex == 0:
+        return day_number
+    while monthIndex != 1:
+        day_number += int(dayEachMonth[monthIndex])
+        monthIndex -= 1
+    
+    day_number += int(dayEachMonth[1])
+    return day_number
+
+for i in range(12):
+    MonthIndex = i + 1
+    DayNumber1, DayNumber2 = 0, 0
+    DayNumber1 = TotalDayInMonth(i)
+    DayNumber2 = TotalDayInMonth(MonthIndex)
+    if i == 11:
+        DayNumber2 -= 1
+        print("Day number 2: ", DayNumber2)
+    ProcessedDataset[DayNumber1:DayNumber2, 4] = np.mean(ProcessedDataset[DayNumber1:DayNumber2, 5])
+
+
 ProcessedDataset = np.delete(ProcessedDataset, 2, 1)
+
+# The function is to calculate the mean absolute error
+def MAE(obtainedValue, actualValue):
+    error = np.abs(obtainedValue - actualValue)
+    return np.mean(error)
+
+def MSE(obtainedValue, actualValue):
+    error = np.abs(obtainedValue - actualValue)
+    return np.sum(error ** 2)
 
 np.random.shuffle(ProcessedDataset)
 print("Shape of the processed dataset: ", ProcessedDataset.shape)
 
-trainingSet = ProcessedDataset[:47040, :]
+trainingSet = ProcessedDataset[:, :]
 # crossvalidationSet = ProcessedDataset[36586:47040, :]
-testSet = ProcessedDataset[47040:, :]
+testSet = ProcessedDataset[73584:, :]
 print("testSet: ", testSet, "\n")
 print("Shape of the testSet: ", testSet.shape)
 
-x_train, y_train = trainingSet[:, 0:2], trainingSet[:, 2]
-x_test, y_test = testSet[:, 0:2], testSet[:,2]
-x_train, x_test = x_train.reshape(-1, 1), x_test.reshape(-1, 1)
+x_train, y_train = trainingSet[:, 0:4], trainingSet[:, 4]
+x_test, y_test = testSet[:, 0:4], testSet[:, 4]
+# x_train, x_test = x_train.reshape(-1, 1), x_test.reshape(-1, 1)
 
 #@C is 1/alpha and can be used to regulate the function
-clf = svm.SVC(C=1.0, kernel='rbf', gamma=20, decision_function_shape='ovr')
+clf = svm.SVC(C=0.1, kernel='sigmoid', gamma='auto', decision_function_shape='ovr',
+max_iter=100000000, random_state=23, coef0=1.0)
 clf.fit(x_train, y_train)
+y_train_pre = clf.predict(x_train)
+y_test_pre = clf.predict(x_test)
+print("train: MAE: ", metrics.mean_absolute_error(y_train_pre, y_train))
+print("train: MSE: ",  metrics.mean_squared_error(y_train_pre, y_train))
+print("test: MAE: ", metrics.mean_absolute_error(y_test_pre, y_test))
+print("test: MSE: ", metrics.mean_squared_error(y_test_pre, y_test))
+MAE(clf.predict(x_train), y_train)
+MSE(clf.predict(x_train), y_train)
+clf.score(x_train, y_train)
+MAE(clf.predict(x_test), y_test)
+MSE(clf.predict(x_test), y_test)
+print()
 
 print("clf train score: ", clf.score(x_train, y_train))
 
@@ -158,6 +171,8 @@ print("clf test score", clf.score(x_test, y_test))
 # y_hat = clf.predict(x_test)
 # show_accuracy(y_hat, y_test, 'test set')
 
+
+
 def show_accuracy(obtainedValue, actualValue, Name):
     if obtainedValue.shape != actualValue.shape:
         print("The obtained value is not exactly the same shape as the actual values.\nComparison cannot be carried out.")
@@ -167,6 +182,10 @@ def show_accuracy(obtainedValue, actualValue, Name):
     for index in range(obtainedValue):
         if obtainedValue[index] == actualValue[index]:
             correctPrediction += 1
+    MAEerror = MAE(obtainedValue, actualValue)
+    print("The mean absolute error is: ", MAEerror)
+    MSEerror = MSE(obtainedValue, actualValue)
+    print("The mean square error is: ", MSEerror)
     print("The accuracy for ", Name, "is: ", correctPrediction/totalNumber)
     # return correctPrediction / totalNumber
 
