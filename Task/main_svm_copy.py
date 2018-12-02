@@ -33,14 +33,14 @@ def ReadFile(file_pathway):
     return matrix
 
 print("Program starting. Please wait;)")
-RoughDataset = ReadFile('wrfdata.5')
+RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.5')
 SWDIR = RoughDataset[:, 1]
 SWDIF = RoughDataset[:, 2]
 GLW = RoughDataset[:, 3]
 
 dt = datetime.datetime(2015, 1, 1, 8, 0, 0)
 end = datetime.datetime(2016, 1, 1, 7, 59, 59)
-step = datetime.timedelta(minutes=5)
+step = datetime.timedelta(minutes=15)
 result1 = []
 result2 = []
 while dt < end:
@@ -94,7 +94,7 @@ for element in ProcessedDataset:
 
 # mean CSR value each day
 for i in range(365):
-    indexa, indexb = i * 365, (i+1) * 365
+    indexa, indexb = i * 96, (i+1) * 96
     ProcessedDataset[indexa:indexb, 3] = np.mean(ProcessedDataset[indexa:indexb, 5])
 
 # mean CSR value each month
@@ -116,8 +116,8 @@ for i in range(12):
     DayNumber1 = TotalDayInMonth(i)
     DayNumber2 = TotalDayInMonth(MonthIndex)
     if i == 11:
-        DayNumber2 -= 1
-        print("Day number 2: ", DayNumber2)
+        ProcessedDataset[DayNumber1:DayNumber2, 4] = np.mean(ProcessedDataset[DayNumber1:, 5])
+        break
     ProcessedDataset[DayNumber1:DayNumber2, 4] = np.mean(ProcessedDataset[DayNumber1:DayNumber2, 5])
 
 

@@ -1,0 +1,311 @@
+sakais-MacBook-Pro:Task ue$ python ts.py
+
+Current station index k is:  0
+train: MAE:  0.9488583059194188
+train: MSE:  4.2621956621924255
+train: RMSE:  2.0645085764395423
+
+Current station index k is:  1
+train: MAE:  0.9512199721500968
+train: MSE:  4.326940466790204
+train: RMSE:  2.0801299158442497
+
+Current station index k is:  2
+train: MAE:  0.9647569161519685
+train: MSE:  4.387917790644028
+train: RMSE:  2.0947357328894802
+
+Current station index k is:  3
+train: MAE:  0.9138383231174779
+train: MSE:  4.151472990213989
+train: RMSE:  2.0375163779007983
+
+Current station index k is:  4
+train: MAE:  0.8864982017177246
+train: MSE:  3.9330913998697534
+train: RMSE:  1.983202309364769
+
+Current station index k is:  5
+train: MAE:  0.9551647241885742
+train: MSE:  4.328250323376435
+train: RMSE:  2.0804447417262577
+
+Current station index k is:  6
+train: MAE:  0.9525171110218323
+train: MSE:  4.280146885860505
+train: RMSE:  2.068851586233412
+
+Current station index k is:  7
+train: MAE:  0.9035705381004934
+train: MSE:  4.076370426355953
+train: RMSE:  2.019002334410724
+
+Current station index k is:  8
+train: MAE:  0.9049716215115118
+train: MSE:  4.104524239479897
+train: RMSE:  2.025962546415875
+
+Current station index k is:  9
+train: MAE:  0.9094236362911747
+train: MSE:  4.120406545124709
+train: RMSE:  2.0298784557516516
+
+Current station index k is:  10
+train: MAE:  0.9541966341634895
+train: MSE:  4.322462402505193
+train: RMSE:  2.0790532466738783
+
+Current station index k is:  11
+train: MAE:  0.9049716215115118
+train: MSE:  4.104524239479897
+train: RMSE:  2.025962546415875
+
+Current station index k is:  12
+train: MAE:  0.9491318210419639
+train: MSE:  4.295436502477011
+train: RMSE:  2.0725434862692294
+
+Current station index k is:  13
+train: MAE:  0.9514609769693751
+train: MSE:  4.2717547913742315
+train: RMSE:  2.066822389895714
+
+Current station index k is:  14
+train: MAE:  0.9047294584753971
+train: MSE:  4.11577501268925
+train: RMSE:  2.028737295139331
+
+Current station index k is:  15
+train: MAE:  0.9349563412641326
+train: MSE:  4.272585051780361
+train: RMSE:  2.067023234455859
+
+Current station index k is:  16
+train: MAE:  0.9647569161519685
+train: MSE:  4.387917790644028
+train: RMSE:  2.0947357328894802
+
+Current station index k is:  17
+train: MAE:  0.9285195880175411
+train: MSE:  4.223236851300018
+train: RMSE:  2.0550515446820348
+
+Current station index k is:  18
+train: MAE:  0.9486114458747884
+train: MSE:  4.306868180017204
+train: RMSE:  2.075299539829661
+
+Current station index k is:  19
+train: MAE:  0.9570274823744842
+train: MSE:  4.315176449123062
+train: RMSE:  2.0773002789974933
+
+Current station index k is:  20
+train: MAE:  0.9035705381004934
+train: MSE:  4.076370426355953
+train: RMSE:  2.019002334410724
+
+Current station index k is:  21
+train: MAE:  0.89413130937842
+train: MSE:  4.080450910584358
+train: RMSE:  2.0200126015904845
+
+Current station index k is:  22
+train: MAE:  0.9362821861836553
+train: MSE:  4.251786260570664
+train: RMSE:  2.0619859991209117
+
+Current station index k is:  23
+train: MAE:  0.9224642408531735
+train: MSE:  4.187685321134573
+train: RMSE:  2.0463834736272117
+
+Current station index k is:  24
+train: MAE:  0.9035705381004934
+train: MSE:  4.076370426355953
+train: RMSE:  2.019002334410724
+
+Current station index k is:  25
+train: MAE:  0.958444912901841
+train: MSE:  4.3138548424387
+train: RMSE:  2.0769821478382284
+
+Current station index k is:  26
+train: MAE:  0.9187982150285459
+train: MSE:  4.15965662177887
+train: RMSE:  2.039523626187956
+
+Current station index k is:  27
+train: MAE:  0.9292579135540887
+train: MSE:  4.177082090806712
+train: RMSE:  2.0437911074292088
+
+Current station index k is:  28
+train: MAE:  0.9204865028178276
+train: MSE:  4.101850501489742
+train: RMSE:  2.025302570355783
+
+Current station index k is:  29
+train: MAE:  0.9462348242126092
+train: MSE:  4.309108732508941
+train: RMSE:  2.0758392838822903
+
+Current station index k is:  30
+train: MAE:  0.9051588636410339
+train: MSE:  4.10265896703925
+train: RMSE:  2.025502151822913
+
+Current station index k is:  31
+train: MAE:  0.9166437730043013
+train: MSE:  4.107277004415227
+train: RMSE:  2.0266418046648567
+
+Current station index k is:  32
+train: MAE:  0.9545403671643464
+train: MSE:  4.30926322247209
+train: RMSE:  2.075876494994847
+
+Current station index k is:  33
+train: MAE:  0.9648047081533252
+train: MSE:  4.3463575181613034
+train: RMSE:  2.0847919604030767
+
+Current station index k is:  34
+train: MAE:  0.8525727154549558
+train: MSE:  3.8833081049523535
+train: RMSE:  1.970611099367999
+
+Current station index k is:  35
+train: MAE:  0.9110971747642425
+train: MSE:  4.0928365692182895
+train: RMSE:  2.023076016668254
+
+Current station index k is:  36
+train: MAE:  0.9049716215115118
+train: MSE:  4.104524239479897
+train: RMSE:  2.025962546415875
+
+Current station index k is:  37
+train: MAE:  0.9541966341634895
+train: MSE:  4.322462402505193
+train: RMSE:  2.0790532466738783
+
+Current station index k is:  38
+train: MAE:  0.8776046401868759
+train: MSE:  4.0054633510066155
+train: RMSE:  2.0013653716916897
+
+Current station index k is:  39
+train: MAE:  0.9284147874168444
+train: MSE:  4.236001323670481
+train: RMSE:  2.058154834717369
+
+Current station index k is:  40
+train: MAE:  0.9545403671643464
+train: MSE:  4.30926322247209
+train: RMSE:  2.075876494994847
+
+Current station index k is:  41
+train: MAE:  0.9051588636410339
+train: MSE:  4.10265896703925
+train: RMSE:  2.025502151822913
+
+Current station index k is:  42
+train: MAE:  0.9252990400361183
+train: MSE:  4.146280269590658
+train: RMSE:  2.0362417021539114
+
+Current station index k is:  43
+train: MAE:  0.9042740056207126
+train: MSE:  4.1225824362141354
+train: RMSE:  2.0304143508688406
+
+Current station index k is:  44
+train: MAE:  0.8749811443457143
+train: MSE:  3.984716162276218
+train: RMSE:  1.9961753836464915
+
+Current station index k is:  45
+train: MAE:  0.9164923299048501
+train: MSE:  4.116763233774645
+train: RMSE:  2.0289808362265633
+
+Current station index k is:  46
+train: MAE:  0.8821228690720909
+train: MSE:  3.9341144088009345
+train: RMSE:  1.9834602110455695
+
+Current station index k is:  47
+train: MAE:  0.9210794465652212
+train: MSE:  4.111478945931383
+train: RMSE:  2.027678215578444
+
+Current station index k is:  48
+train: MAE:  0.9122700226798922
+train: MSE:  4.149211981169593
+train: RMSE:  2.0369614579489697
+
+Current station index k is:  49
+train: MAE:  0.9570274823744842
+train: MSE:  4.315176449123062
+train: RMSE:  2.0773002789974933
+
+Current station index k is:  50
+train: MAE:  0.930029433821466
+train: MSE:  4.212911655077192
+train: RMSE:  2.0525378571605426
+
+Current station index k is:  51
+train: MAE:  0.9310912018561327
+train: MSE:  4.240851186174154
+train: RMSE:  2.059332704099596
+
+Current station index k is:  52
+train: MAE:  0.9204865028178276
+train: MSE:  4.101850501489742
+train: RMSE:  2.025302570355783
+
+Current station index k is:  53
+train: MAE:  0.9107017565728909
+train: MSE:  4.134830109017277
+train: RMSE:  2.0334281666725476
+
+Current station index k is:  54
+train: MAE:  0.8295101631544307
+train: MSE:  3.7455153423812466
+train: RMSE:  1.9353333930827645
+
+Current station index k is:  55
+train: MAE:  0.9023289392170987
+train: MSE:  4.12755242723516
+train: RMSE:  2.0316378681337772
+
+Current station index k is:  56
+train: MAE:  0.868110596747137
+train: MSE:  3.9335153610121614
+train: RMSE:  1.983309194506031
+
+Current station index k is:  57
+train: MAE:  0.9166437730043013
+train: MSE:  4.107277004415227
+train: RMSE:  2.0266418046648567
+
+Current station index k is:  58
+train: MAE:  0.917814260750579
+train: MSE:  4.110830787364679
+train: RMSE:  2.027518381510925
+
+Current station index k is:  59
+train: MAE:  0.9284147874168444
+train: MSE:  4.236001323670481
+train: RMSE:  2.058154834717369
+
+Current station index k is:  60
+train: MAE:  0.9107017565728909
+train: MSE:  4.134830109017277
+train: RMSE:  2.0334281666725476
+
+Current station index k is:  61
+train: MAE:  0.9545403671643464
+train: MSE:  4.30926322247209
+train: RMSE:  2.075876494994847
