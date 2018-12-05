@@ -1,18 +1,12 @@
 # This file is to combine data from 63 stns and their correspond locations
-# and fit them into a model based on random forest regressor
+# and fit the data into a model based on random forest classifier
 import numpy as np
 import datetime
 from sklearn import metrics
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.model_selection import train_test_split 
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import KFold
-from sklearn.metrics import make_scorer
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import ShuffleSplit
-from sklearn.metrics import r2_score
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
-print("The program running now is a model based on KNN regressor.")
+print("The program running now is a model based on random forest classifier.")
 file_path = "/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/tslist"
 FinalDataset = np.zeros(shape=(2172480, 8), dtype=float)
 location_nparray = np.zeros(shape=(63, 3), dtype=float)
@@ -159,71 +153,41 @@ for k in range(62):
 print("Great to know you have completed the read in of dataset!!!")
 print("Now is the more time consuming part..")
 np.random.shuffle(FinalDataset)
-SampleSet = FinalDataset[:50000, :]
 print("Shape of final dataset: ", FinalDataset.shape)
-X_sample, y_sample = SampleSet[:, :7], SampleSet[:, 7]
-x_train, x_test, y_train, y_test = train_test_split(X_sample, y_sample, test_size=0.1, random_state=42)
+training_set, test_set = FinalDataset[:, :], FinalDataset[:651744, :]
+SampleSet_X, SampleSet_y = FinalDataset[:500000, :7], FinalDataset[:500000, 7]
+x_train, x_test, y_train, y_test = train_test_split(SampleSet_X, SampleSet_y, test_size=0.1, random_state=42)
 
 print("Now begin to fit in the data.")
 start_time = datetime.datetime.now()
-
-def performance_metric(y_true,y_pred):
-    score=r2_score(y_true,y_pred)
-    return score
-def fit_model_shuffle(X,y):
-    cv_sets = ShuffleSplit(n_splits = 10, test_size = 0.20, random_state = 0)
-    knn = KNeighborsRegressor()
-    params={'n_neighbors':range(3,10)}
-    scoring_fnc=make_scorer(performance_metric)
-    grid=GridSearchCV(knn, param_grid=params,scoring=scoring_fnc,cv=cv_sets)
-    grid = grid.fit(X, y)
-    return grid.best_estimator_
-def fit_model_k_fold(X,y):
-    k_fold=KFold(n_splits=5)
-    knn=KNeighborsRegressor()
-    params={'n_neighbors':range(100,1000,10), 'n_jobs':[-1]}
-    scoring_fnc=make_scorer(performance_metric)
-    grid = GridSearchCV(knn, param_grid=params,scoring=scoring_fnc,cv=k_fold)
-    grid = grid.fit(X, y)
-    return grid.best_estimator_
-# reg = fit_model_k_fold(x_train, y_train)
-# print(reg.get_params())
-
-reg = KNeighborsRegressor(n_neighbors=300)
-reg.fit(x_train, y_train)
-
+# random_forest = RandomForestClassifier(n_estimators = 500, max_features=None, n_jobs=-1, max_leaf_nodes=None)
+# random_forest = RandomForestClassifier(n_estimators=500, oob_score=True, min_samples_leaf=300, random_state=23)
+random_forest = RandomForestClassifier()
+random_forest.fit(x_train, y_train)
 print("Data fit in successfully!")
 
 end_time = datetime.datetime.now()
-print("Time taken to run the program till fit in of all the data: ", (end_time-start_time).seconds, " seconds")
+print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
 
 start_time = datetime.datetime.now()
-print("The score for KNN regressor.")
+print("The score for random forest.")
 
-y_train_pre = reg.predict(x_train)
+y_train_pre = random_forest.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
 print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
 print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(y_train, y_train_pre)))
 
-y_test_pre = reg.predict(x_test)
+y_test_pre = random_forest.predict(x_test)
 print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
 print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
 print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
 end_time = datetime.datetime.now()
-print("Time taken to run the program till complete the prediction and give the score: ", (end_time-start_time).seconds, " seconds")
+print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
+# The value below looks very unsatisfying and I'm gonna redo the whole thing
+# train: MAE:  2.350571111111111
+# train: MSE:  18.430704444444444
+# train: RMSE:  4.293099631320527
+# test: MAE:  2.38744
+# test: MSE:  18.79496
+# test: RMSE:  4.335315444117072
 
-# The score is similarly not satisfying, will try some more.
-# rain: MAE:  0.9334918388201503
-# train: MSE:  3.241064795088256
-# train: RMSE:  1.8002957521163727
-# test: MAE:  0.9284054628811319
-# test: MSE:  3.2160180687338733
-# test: RMSE:  1.7933259794956056
-
-# sampling
-# train: MAE: 1.48058
-# train: MSE: 4.68965
-# train: RMSE: 2.165633
-# test: MAE: 1.48900
-# test: MSE: 4.74354
-# test: RMSE: 2.17796

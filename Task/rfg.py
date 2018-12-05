@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor 
 from sklearn.ensemble import RandomForestRegressor 
 
-print("The program running now is a model based on random forest classifier.")
+print("The program running now is a model based on random forest regressor.")
 file_path = "/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/tslist"
 FinalDataset = np.zeros(shape=(2172480, 8), dtype=float)
 location_nparray = np.zeros(shape=(63, 3), dtype=float)
@@ -155,9 +155,9 @@ print("Great to know you have completed the read in of dataset!!!")
 print("Now is the more time consuming part..")
 np.random.shuffle(FinalDataset)
 print("Shape of final dataset: ", FinalDataset.shape)
-training_set, test_set = FinalDataset[:, :], FinalDataset[:651744, :]
-x_train, y_train = training_set[:, 0:7], training_set[:, 7]
-x_test, y_test = test_set[:, 0:7], test_set[:, 7]
+SampleSet = FinalDataset[:181040, :]
+X_sample, y_sample = SampleSet[:, :7], SampleSet[:, 7]
+x_train, x_test, y_train, y_test = train_test_split(X_sample, y_sample, test_size=0.1, random_state=42)
 
 print("Now begin to fit in the data.")
 start_time = datetime.datetime.now()
@@ -170,7 +170,7 @@ end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
 
 start_time = datetime.datetime.now()
-print("The score for random forest.")
+print("The score for random forest regressor.")
 
 y_train_pre = random_forest_regressor.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
@@ -182,7 +182,7 @@ print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
 print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
 print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
 end_time = datetime.datetime.now()
-print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
+print("Time taken to run the program till complete the prediction and give the score: ", (end_time-start_time).seconds, " seconds")
 
 # The value below looks very unsatisfying and I'm gonna redo the whole thing
 #

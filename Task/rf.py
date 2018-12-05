@@ -161,7 +161,8 @@ x_test, y_test = test_set[:, 0:7], test_set[:, 7]
 print("Now begin to fit in the data.")
 start_time = datetime.datetime.now()
 # random_forest = RandomForestClassifier(n_estimators = 500, max_features=None, n_jobs=-1, max_leaf_nodes=None)
-random_forest = RandomForestClassifier(n_estimators=500, oob_score=True, min_samples_leaf=300, random_state=23)
+# random_forest = RandomForestClassifier(n_estimators=500, oob_score=True, min_samples_leaf=300, random_state=23)
+random_forest = RandomForestClassifier()
 random_forest.fit(x_train, y_train)
 print("Data fit in successfully!")
 
