@@ -172,21 +172,30 @@ print("Time taken to run the program till complete the first model: ", (end_time
 start_time = datetime.datetime.now()
 print("The score for random forest.")
 
+def mean_absolute_percentage_error(y_true, y_pred): 
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 1
+
 y_train_pre = random_forest.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
 print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
 print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(y_train, y_train_pre)))
+print("train: MAPE: ", mean_absolute_percentage_error(y_train, y_train_pre))
 
 y_test_pre = random_forest.predict(x_test)
 print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
 print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
 print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
+print("test: MAPE: ", mean_absolute_percentage_error(y_test, y_test_pre))
+
 end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
 # The value below looks very unsatisfying and I'm gonna redo the whole thing
 # train: MAE:  2.3734676498747973
 # train: MSE:  18.63891083001915
 # train: RMSE:  4.317280490079275
+# MAPE: 161.61072
 # test: MAE:  2.3676673663278835
 # test: MSE:  18.587216759954828
 # test: RMSE:  4.311289454438756
+# MAPE: 161.59286

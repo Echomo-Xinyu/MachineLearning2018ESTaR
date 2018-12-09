@@ -167,15 +167,21 @@ max_iter=100000000, random_state=23, coef0=1.0)
 clf.fit(x_train, y_train)
 print("Data fit in successfully!")
 
+def mean_absolute_percentage_error(y_true, y_pred): 
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+
 y_train_pre = clf.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
 print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
 print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(y_train, y_train_pre)))
+print("train: MAPE: ", mean_absolute_percentage_error(y_train, y_train_pre))
 
 y_test_pre = clf.predict(x_test)
 print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
 print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
 print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
+print("test: MAPE: ", mean_absolute_percentage_error(y_test, y_test_pre))
 
 end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
@@ -184,3 +190,4 @@ print("Time taken to run the program till complete the first model: ", (end_time
 # train MAE: 2.52782
 # train MSE: 20.19782
 # train RMSE: 4.49420
+# train MAPE: # the actual data is nan

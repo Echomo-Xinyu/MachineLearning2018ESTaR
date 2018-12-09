@@ -158,6 +158,10 @@ print("Shape of final dataset: ", FinalDataset.shape)
 X_sample, y_sample = SampleSet[:, :7], SampleSet[:, 7]
 x_train, x_test, y_train, y_test = train_test_split(X_sample, y_sample, test_size=0.1, random_state=42)
 
+def mean_absolute_percentage_error(y_true, y_pred): 
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+
 start_time = datetime.datetime.now()
 MLP = MLPClassifier(activation='relu', alpha=0, hidden_layer_sizes=(100000, 100), learning_rate='adaptive')
 MLP.fit(x_train, y_train)
@@ -167,12 +171,25 @@ y_train_pre = MLP.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
 print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
 print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(y_train, y_train_pre)))
+print("train: MAPE: ", mean_absolute_percentage_error(y_train, y_train_pre))
 
 y_test_pre = MLP.predict(x_test)
 print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
 print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
 print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
+print("test: MAPE: ", mean_absolute_percentage_error(y_test, y_test_pre))
 
 end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
 
+# Score:
+# train:
+# MAE: 2.39540
+# MSE: 18.83613
+# RMSE: 4.34006
+# MAPE: 162.7804
+# test:
+# MAE: 2.38804
+# MSE: 18.77087
+# RMSE: 4.33254
+# MAPE: 162.21455

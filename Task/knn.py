@@ -200,15 +200,21 @@ print("Time taken to run the program till fit in of all the data: ", (end_time-s
 start_time = datetime.datetime.now()
 print("The score for KNN regressor.")
 
+def mean_absolute_percentage_error(y_true, y_pred): 
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 1
+
 y_train_pre = reg.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
 print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
 print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(y_train, y_train_pre)))
+print("train: MAPE: ", mean_absolute_percentage_error(y_train, y_train_pre))
 
 y_test_pre = reg.predict(x_test)
 print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
 print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
 print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
+print("test: MAPE: ", mean_absolute_percentage_error(y_test, y_test_pre))
 end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the prediction and give the score: ", (end_time-start_time).seconds, " seconds")
 
@@ -216,9 +222,11 @@ print("Time taken to run the program till complete the prediction and give the s
 # rain: MAE:  0.9334918388201503
 # train: MSE:  3.241064795088256
 # train: RMSE:  1.8002957521163727
+# train: MAPE: 34.526255609
 # test: MAE:  0.9284054628811319
 # test: MSE:  3.2160180687338733
 # test: RMSE:  1.7933259794956056
+# test: MAPE: 34.106331429
 
 # sampling
 # train: MAE: 1.48058
