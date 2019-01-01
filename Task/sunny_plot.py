@@ -315,5 +315,5 @@ plt.title("CSR prediction by SVC, RF, KNN, and SARIMAX models on 7th August 2018
 plt.xlabel("Time")
 plt.ylabel("CSR value")
 plt.legend()
-plt.savefig("CloudyDay_overall_plots.svg", format="svg")
+plt.savefig("SunnyDay_overall_plots.svg", format="svg")
 plt.close()
