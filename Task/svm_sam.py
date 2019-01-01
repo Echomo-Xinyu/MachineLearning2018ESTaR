@@ -7,6 +7,7 @@ from sklearn import metrics
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import BaggingClassifier
 from sklearn.multiclass import OneVsRestClassifier
+import matplotlib.pyplot as plt
 
 print("The program running now is the model based on svm.")
 file_path = "/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/tslist"
@@ -64,7 +65,7 @@ step = datetime.timedelta(minutes=15)
 result1 = []
 result2 = []
 while dt < end:
-    result1.append(float(dt.strftime('%Y%m%d%H%M%S')))
+    result1.append(float(dt.strftime('%m%d%H')))
     result2.append(float(dt.strftime('%m')))
     dt += step
 Time_long = np.asarray(result1)
@@ -155,7 +156,7 @@ for k in range(62):
 print("Great to know you have completed the read in of dataset!!!")
 print("Now is the more time consuming part..")
 np.random.shuffle(FinalDataset)
-SampleSet = FinalDataset[:500000, :]
+SampleSet = FinalDataset[:, :]
 print("Shape of final dataset: ", FinalDataset.shape)
 X_sample, y_sample = SampleSet[:, :7], SampleSet[:, 7]
 
@@ -191,3 +192,18 @@ print("Time taken to run the program till complete the first model: ", (end_time
 # train MSE: 20.19782
 # train RMSE: 4.49420
 # train MAPE: # the actual data is nan
+
+MonthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+print("Now plotting the predicted trend..")
+
+for i in range(12):
+    TimeInitialValue = i * 2920
+    TimeFinalValue = i * 2920 + 2920
+    CurrentMonth = MonthName[i]
+    plt.plot(Time_long[TimeInitialValue:TimeFinalValue], y_train_pre[TimeInitialValue:TimeFinalValue], 'b--', linewidth=1)
+    plt.plot(Time_long[TimeInitialValue:TimeFinalValue], y_train[TimeInitialValue:TimeFinalValue], 'r,')
+    plt.xlabel('Time')
+    plt.ylabel('CSR(predicted)')
+    figureName = 'SVM' + CurrentMonth + '.svg'
+    plt.savefig(figureName, format="svg")
+    plt.close()

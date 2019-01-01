@@ -6,7 +6,7 @@ import math
 import warnings
 import itertools
 import pandas as pd
-from pandas import datetime
+# from pandas import datetime
 import statsmodels.api as sm
 from sklearn import svm
 from sklearn import metrics
@@ -15,6 +15,7 @@ from sklearn import metrics
 # from statsmodels.tsa.arima_model import ARMA
 # from statsmodels.tsa.arima_model import ARIMA
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 
 file_path = "/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/tslist"
@@ -48,6 +49,18 @@ endindex = "2016-01-01 7:59"
 
 TimeDF = pd.date_range(start=startindex, end=endindex, freq="15T")
 
+dt = datetime.datetime(2015, 1, 1, 8, 0, 0)
+end = datetime.datetime(2016, 1, 1, 7, 59, 59)
+step = datetime.timedelta(minutes=15)
+result1 = []
+result2 = []
+while dt < end:
+    result1.append(float(dt.strftime('%m%d%H%M')))
+    result2.append(dt.strftime("%m/%d/%H:%M"))
+    dt += step
+Time_long = np.asarray(result1)
+DateTime = np.asarray(result2)
+
 # Read the data
 def ReadFile(file_pathway):
     f = open(file_pathway)
@@ -70,7 +83,7 @@ def ReadFile(file_pathway):
     matrix = matrix.transpose()
     f.close()
     return matrix
-k = 10
+k = 54
 print("Current station index k is: ", k)
 index = k + 1
 file_path =  "/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata." + str(index)
@@ -190,11 +203,77 @@ res = mod.filter(training_res.params)
 # print(np.sqrt(np.sum(forecast_error**2) / T))
 
 y_train_pre = res.predict()
-print("train: MAE: ", metrics.mean_absolute_error(time_series.loc["2015-01-01":], y_train_pre.loc["2015-01-01":]))
-print("train: MSE: ",  metrics.mean_squared_error(time_series.loc["2015-01-01":], y_train_pre.loc["2015-01-01":]))
-print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(time_series.loc["2015-01-01":], y_train_pre.loc["2015-01-01":])))
+# # The part below is to convert the regression result to the classification result
+# for item in y_train_pre:
+#     if np.isnan(item):
+#         item = 0
+#     elif item < 0.1:
+#         item = 1
+#     elif item < 0.2:
+#         item = 2
+#     elif item < 0.3:
+#         item = 3
+#     elif item < 0.4:
+#         item = 4
+#     elif item < 0.5:
+#         item = 5
+#     elif item < 0.6:
+#         item = 6
+#     elif item < 0.7:
+#         item = 7
+#     elif item < 0.8:
+#         item = 8
+#     elif item < 0.9:
+#         item = 9
+#     elif item <= 1.0:
+#         item = 10
+# print("train: MAE: ", metrics.mean_absolute_error(time_series.loc["2015-01-01":], y_train_pre.loc["2015-01-01":]))
+# print("train: MSE: ",  metrics.mean_squared_error(time_series.loc["2015-01-01":], y_train_pre.loc["2015-01-01":]))
+# print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(time_series.loc["2015-01-01":], y_train_pre.loc["2015-01-01":])))
 
-# Output:
-# train: MAE:  0.9541966341634895
-# train: MSE:  4.322462402505193
-# train: RMSE:  2.0790532466738783
+# # Output:
+# # regression:
+# # train: MAE:  0.9541966341634895
+# # train: MSE:  4.322462402505193
+# # train: RMSE:  2.0790532466738783
+# # after converting to classification:
+# # train: MAE:  0.8295101631544307
+# # train: MSE:  3.7455153423812466
+# # train: RMSE:  1.9353333930827645
+
+
+# MonthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+# print("Now plotting the predicted trend..")
+
+# dayEachMonth = {1:"31", 2:"28", 3:"31", 4:"30", 5:"31", 6:"30", 7:"31", 8:"31", 9:"30", 10:"31", 11:"30", 12:"31"}
+# def TotalDayInMonth(monthIndex):
+#     day_number = 0
+#     if monthIndex == 0:
+#         return day_number
+#     while monthIndex != 1:
+#         day_number += int(dayEachMonth[monthIndex])
+#         monthIndex -= 1
+#     day_number += int(dayEachMonth[1])
+#     return day_number
+
+# for i in range(12):
+#     TimeInitialValue = i * 2920
+#     TimeFinalValue = i * 2920 + 2920
+#     CurrentMonth = MonthName[i]
+#     plt.plot(Time_long[TimeInitialValue:TimeFinalValue], y_train_pre[TimeInitialValue:TimeFinalValue], 'b--', linewidth=1)
+#     plt.plot(Time_long[TimeInitialValue:TimeFinalValue], CSRGroup[TimeInitialValue:TimeFinalValue], 'r,')
+#     plt.xlabel('Time')
+#     plt.ylabel('CSR(predicted)')
+#     figureName = 'TS' + CurrentMonth + '.svg'
+#     plt.savefig(figureName, format="svg")
+#     plt.close()
+
+Dt_formatted = [datetime.datetime.strptime(d, "%m/%d/%H:%M").date() for d in DateTime]
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d'))
+
+plt.plot(Dt_formatted[:], y_train_pre[:], 'b--', linewidth=1)
+plt.plot(Dt_formatted[:], CSRGroup[:], 'r,')
+plt.xlabel("Time(MM/DD)")
+plt.ylabel("CSR by TS")
+plt.savefig("TS_Overall.svg", format='svg')
+plt.close()

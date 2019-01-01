@@ -159,7 +159,7 @@ for k in range(62):
 print("Great to know you have completed the read in of dataset!!!")
 print("Now is the more time consuming part..")
 np.random.shuffle(FinalDataset)
-SampleSet = FinalDataset[:50000, :]
+SampleSet = FinalDataset[:, :]
 print("Shape of final dataset: ", FinalDataset.shape)
 X_sample, y_sample = SampleSet[:, :7], SampleSet[:, 7]
 x_train, x_test, y_train, y_test = train_test_split(X_sample, y_sample, test_size=0.1, random_state=42)
@@ -167,29 +167,29 @@ x_train, x_test, y_train, y_test = train_test_split(X_sample, y_sample, test_siz
 print("Now begin to fit in the data.")
 start_time = datetime.datetime.now()
 
-def performance_metric(y_true,y_pred):
-    score=r2_score(y_true,y_pred)
-    return score
-def fit_model_shuffle(X,y):
-    cv_sets = ShuffleSplit(n_splits = 10, test_size = 0.20, random_state = 0)
-    knn = KNeighborsRegressor()
-    params={'n_neighbors':range(3,10)}
-    scoring_fnc=make_scorer(performance_metric)
-    grid=GridSearchCV(knn, param_grid=params,scoring=scoring_fnc,cv=cv_sets)
-    grid = grid.fit(X, y)
-    return grid.best_estimator_
-def fit_model_k_fold(X,y):
-    k_fold=KFold(n_splits=5)
-    knn=KNeighborsRegressor()
-    params={'n_neighbors':range(100,1000,10), 'n_jobs':[-1]}
-    scoring_fnc=make_scorer(performance_metric)
-    grid = GridSearchCV(knn, param_grid=params,scoring=scoring_fnc,cv=k_fold)
-    grid = grid.fit(X, y)
-    return grid.best_estimator_
-# reg = fit_model_k_fold(x_train, y_train)
-# print(reg.get_params())
+# def performance_metric(y_true,y_pred):
+#     score=r2_score(y_true,y_pred)
+#     return score
+# def fit_model_shuffle(X,y):
+#     cv_sets = ShuffleSplit(n_splits = 10, test_size = 0.20, random_state = 0)
+#     knn = KNeighborsRegressor()
+#     params={'n_neighbors':range(3,10)}
+#     scoring_fnc=make_scorer(performance_metric)
+#     grid=GridSearchCV(knn, param_grid=params,scoring=scoring_fnc,cv=cv_sets)
+#     grid = grid.fit(X, y)
+#     return grid.best_estimator_
+# def fit_model_k_fold(X,y):
+#     k_fold=KFold(n_splits=5)
+#     knn=KNeighborsRegressor()
+#     params={'n_neighbors':range(100,1000,10), 'n_jobs':[-1]}
+#     scoring_fnc=make_scorer(performance_metric)
+#     grid = GridSearchCV(knn, param_grid=params,scoring=scoring_fnc,cv=k_fold)
+#     grid = grid.fit(X, y)
+#     return grid.best_estimator_
+# # reg = fit_model_k_fold(x_train, y_train)
+# # print(reg.get_params())
 
-reg = KNeighborsRegressor(n_neighbors=300)
+reg = KNeighborsRegressor(n_neighbors=400)
 reg.fit(x_train, y_train)
 
 print("Data fit in successfully!")
@@ -200,21 +200,21 @@ print("Time taken to run the program till fit in of all the data: ", (end_time-s
 start_time = datetime.datetime.now()
 print("The score for KNN regressor.")
 
-def mean_absolute_percentage_error(y_true, y_pred): 
-    y_true, y_pred = np.array(y_true), np.array(y_pred)
-    return np.mean(np.abs((y_true - y_pred) / y_true)) * 1
+# def mean_absolute_percentage_error(y_true, y_pred): 
+#     y_true, y_pred = np.array(y_true), np.array(y_pred)
+#     return np.mean(np.abs((y_true - y_pred) / y_true)) * 1
 
 y_train_pre = reg.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
 print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
 print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(y_train, y_train_pre)))
-print("train: MAPE: ", mean_absolute_percentage_error(y_train, y_train_pre))
+# print("train: MAPE: ", mean_absolute_percentage_error(y_train, y_train_pre))
 
 y_test_pre = reg.predict(x_test)
 print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
 print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
 print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
-print("test: MAPE: ", mean_absolute_percentage_error(y_test, y_test_pre))
+# print("test: MAPE: ", mean_absolute_percentage_error(y_test, y_test_pre))
 end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the prediction and give the score: ", (end_time-start_time).seconds, " seconds")
 

@@ -4,6 +4,7 @@ import numpy as np
 import datetime
 from sklearn import svm
 from sklearn import metrics
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import BaggingClassifier
 from sklearn.multiclass import OneVsRestClassifier
@@ -169,14 +170,28 @@ print("Data fit in successfully!")
 
 y_train_pre = clf.predict(x_train)
 print("train: MAE: ", metrics.mean_absolute_error(y_train, y_train_pre))
-print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
+# print("train: MSE: ",  metrics.mean_squared_error(y_train, y_train_pre))
 print("train: RMSE: ", np.sqrt(metrics.mean_squared_error(y_train, y_train_pre)))
 
-y_test_pre = clf.predict(x_test)
-print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
-print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
-print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
+# y_test_pre = clf.predict(x_test)
+# print("test: MAE: ", metrics.mean_absolute_error(y_test, y_test_pre))
+# print("test: MSE: ", metrics.mean_squared_error(y_test, y_test_pre))
+# print("test: RMSE: ", np.sqrt(metrics.mean_squared_error(y_test, y_test_pre)))
 
 end_time = datetime.datetime.now()
 print("Time taken to run the program till complete the first model: ", (end_time-start_time).seconds, " seconds")
 
+# predicted_CSR = clf.predict(x_train)
+MonthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+print("Now plotting the predicted trend..")
+
+for i in range(12):
+    TimeInitialValue = i * 2920
+    TimeFinalValue = i * 2920 + 2920
+    CurrentMonth = MonthName[i]
+    plt.plot(Time_long[TimeInitialValue:TimeFinalValue], y_train_pre[TimeInitialValue:TimeFinalValue], 'b--', linewidth=1)
+    plt.xlabel('Time')
+    plt.ylabel('CSR(predicted)')
+    figureName = CurrentMonth + '.svg'
+    plt.savefig(figureName, format="svg")
+    plt.close()
