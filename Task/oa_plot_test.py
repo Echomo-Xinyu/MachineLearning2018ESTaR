@@ -81,6 +81,8 @@ month_index = np.asarray(result2)
 Time = np.asarray(result3)
 # DateTime = np.asarray(result4)
 
+# DateTime = np.arange('2018-01-01T08:00', '2019-01-01T07:59', dtype='datetime64[D]')
+
 startindex = "2015-01-01 8:00"
 endindex = "2016-01-01 7:59"
 DateTime = pd.date_range(start=startindex, end=endindex, freq="15T")
@@ -190,10 +192,13 @@ print("Time taken to run the program till fit in of all the data: ", (end_time-s
 
 x_prediction, y_prediction = PredictionDataset_knn[:, :7], PredictionDataset_knn[:, 7]
 y_prediction_pre = reg.predict(x_prediction)
+plt.figure(figsize=(20, 13.596))
 
-plt.figure(figsize=(20, 12.36))
-plt.plot(DateTime[:64], y_prediction[:64], 'rx', label="Actual observation", markersize=12)
-plt.plot(DateTime[:64], y_prediction_pre[:64], 'b--', linewidth=3, label="KNN model")
+# Dt_formatted = [datetime.datetime.strptime(d, "%H:%M").date() for d in DateTime]
+# plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H;%M'))
+
+plt.plot(DateTime[:64], y_prediction[:64], 'r+', label="Actual observation")
+plt.plot(DateTime[:64], y_prediction_pre[:64], 'b--', linewidth=1, label="KNN model")
 
 # svm
 RoughDataset = ReadFile('/Users/ue/Downloads/MachineLearning2018ESTaR/Dataset/wrfdata.55')
@@ -253,7 +258,7 @@ x_train_svm, x_test_svm, y_train_svm, y_test_svm = train_test_split(X_sample, y_
 clf = svm.SVC(C=1.0, kernel='rbf', gamma=20, decision_function_shape='ovr')
 clf.fit(x_train_svm, y_train_svm)
 y_true_pre_svm = clf.predict(x_true)
-plt.plot(DateTime[:64], y_true_pre_svm[:], 'g--', linewidth=3, label="SVC model")
+plt.plot(DateTime[:64], y_true_pre_svm[:], 'g--', linewidth=1, label="SVC model")
 
 # RF Block
 X_sample, y_sample = ProcessedDataset_copy[:, 0].reshape(-1,1), ProcessedDataset_copy[:,1]
@@ -262,7 +267,7 @@ x_train, x_test, y_train, y_test = train_test_split(X_sample, y_sample, test_siz
 rf = RandomForestClassifier(n_estimators=1000, random_state=23)
 rf.fit(x_train, y_train)
 y_true_pre_rf = rf.predict(x_true)
-plt.plot(DateTime[:64], y_true_pre_rf[:64], 'm--', linewidth=3, label="RF model")
+plt.plot(DateTime[:64], y_true_pre_rf[:64], 'm--', linewidth=1, label="RF model")
 
 # SARIMAX block
 startindex = "2015-01-01 8:00"
@@ -313,13 +318,11 @@ mod = sm.tsa.SARIMAX(time_series, order=(1,0,1))
 res = mod.filter(training_res.params)
 
 y_train_pre = res.predict()
-plt.plot(DateTime[:64], y_train_pre[:64], 'y--', linewidth=3, label="SARIMAX model")
+plt.plot(DateTime[:64], y_train_pre[:64], 'y--', linewidth=1, label="SARIMAX model")
 
-plt.title("Figure 3: CSR prediction by SVC, RF, KNN, and SARIMAX models on 1st January 2018 at Tuas South", fontsize=20)
-plt.xticks(fontsize=20)
-plt.xlabel("Time (MM-DD HH)", fontsize=20)
-plt.yticks(fontsize=20)
-plt.ylabel("CSR value", fontsize=20)
-plt.legend(fontsize=20)
-plt.savefig("DAY1_overall_plots.png", format="png")
+plt.title("CSR prediction by SVC, RF, KNN, and SARIMAX models on 1st January 2018 at Tuas South")
+plt.xlabel("Time")
+plt.ylabel("CSR value")
+plt.legend()
+plt.savefig("DAY1_overall_plots_test.png", format="png")
 plt.close()

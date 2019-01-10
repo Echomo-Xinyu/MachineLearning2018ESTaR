@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import datetime
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import statsmodels.api as sm
 from sklearn import svm
 from sklearn import metrics
@@ -69,17 +70,21 @@ step = datetime.timedelta(minutes=15)
 result1 = []
 result2 = []
 result3 = []
-result4 = []
+# result4 = []
 while dt < end:
     result1.append(float(dt.strftime('%Y%m%d%H%M%S')))
     result2.append(float(dt.strftime('%m')))
     result3.append(float(dt.strftime("%m%d%H%M")))
-    result4.append(dt.strftime("%H:%M"))
+    # result4.append(dt.strftime("%H:%M"))
     dt += step
 Time_long = np.asarray(result1)
 month_index = np.asarray(result2)
 Time = np.asarray(result3)
-DateTime = np.asarray(result4)
+# DateTime = np.asarray(result4)
+
+startindex = "2015-01-01 8:00"
+endindex = "2016-01-01 7:59"
+DateTime = pd.date_range(start=startindex, end=endindex, freq="15T")
 
 # mean CSR value each month
 dayEachMonth = {1:"31", 2:"28", 3:"31", 4:"30", 5:"31", 6:"30", 7:"31", 8:"31", 9:"30", 10:"31", 11:"30", 12:"31"}
@@ -186,9 +191,10 @@ print("Time taken to run the program till fit in of all the data: ", (end_time-s
 
 x_prediction, y_prediction = PredictionDataset_knn[:, :7], PredictionDataset_knn[:, 7]
 y_prediction_pre = reg.predict(x_prediction)
-plt.figure(figsize=(55, 13.596))
-plt.plot(DateTime[9504:9600], y_prediction[9504:9600], 'r+', label="Actual observation")
-plt.plot(DateTime[9504:9600], y_prediction_pre[9504:9600], 'b--', linewidth=1, label="KNN model")
+
+plt.figure(figsize=(20, 12.36))
+plt.plot(DateTime[9504:9600], y_prediction[9504:9600], 'rx', label="Actual observation", markersize=20)
+plt.plot(DateTime[9504:9600], y_prediction_pre[9504:9600], 'b--', linewidth=3, label="KNN model")
 
 
 # svm
@@ -249,7 +255,7 @@ x_train_svm, x_test_svm, y_train_svm, y_test_svm = train_test_split(X_sample, y_
 clf = svm.SVC(C=1.0, kernel='rbf', gamma=20, decision_function_shape='ovr')
 clf.fit(x_train_svm, y_train_svm)
 y_true_pre_svm = clf.predict(x_true)
-plt.plot(DateTime[9504:9600], y_true_pre_svm[9504:9600], 'g--', linewidth=1, label="SVC model")
+plt.plot(DateTime[9504:9600], y_true_pre_svm[9504:9600], 'g--', linewidth=3, label="SVC model")
 
 # RF Block
 X_sample, y_sample = ProcessedDataset_copy[:, 0].reshape(-1,1), ProcessedDataset_copy[:,1]
@@ -258,7 +264,7 @@ x_train, x_test, y_train, y_test = train_test_split(X_sample, y_sample, test_siz
 rf = RandomForestClassifier(n_estimators=1000, random_state=23)
 rf.fit(x_train, y_train)
 y_true_pre_rf = rf.predict(x_true)
-plt.plot(DateTime[9504:9600], y_true_pre_rf[9504:9600], 'm--', linewidth=1, label="RF model")
+plt.plot(DateTime[9504:9600], y_true_pre_rf[9504:9600], 'm--', linewidth=3, label="RF model")
 
 # SARIMAX block
 startindex = "2015-01-01 8:00"
@@ -309,11 +315,13 @@ mod = sm.tsa.SARIMAX(time_series, order=(1,0,1))
 res = mod.filter(training_res.params)
 
 y_train_pre = res.predict()
-plt.plot(DateTime[9504:9600], y_train_pre[9504:9600], 'y--', linewidth=1, label="SARIMAX model")
+plt.plot(DateTime[9504:9600], y_train_pre[9504:9600], 'y--', linewidth=3, label="SARIMAX model")
 
-plt.title("CSR prediction by SVC, RF, KNN, and SARIMAX models on 9th April 2018 at Bukit Timah (A rainy day specially picked)")
-plt.xlabel("Time")
-plt.ylabel("CSR value")
-plt.legend()
-plt.savefig("CloudyDay_overall_plots.svg", format="svg")
+plt.title("Figure 5: CSR prediction by SVC, RF, KNN, and SARIMAX models on 9th April 2018 at Bukit Timah (A cloudy day specially picked)", fontsize=20)
+plt.xticks(fontsize=20)
+plt.xlabel("Time (MM-DD HH)", fontsize=20)
+plt.yticks(fontsize=20)
+plt.ylabel("CSR value", fontsize=20)
+plt.legend(fontsize=20)
+plt.savefig("CloudyDay_overall_plots.png", format="png")
 plt.close()
